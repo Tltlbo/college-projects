@@ -1,0 +1,27 @@
+#define PUMP_FILE_NAME	"/dev/pump_driver"// led device name 바꿔야함
+int main(int argc, char **argv)
+{
+       int pump_fd;
+       char data;
+
+       pump_fd = open(PUMP_FILE_NAME, O_RDWR);	// Device open
+       if (pump_fd < 0) // If not open normally, close after error handling
+       {
+              fprintf(stderr, “Can’t open %s\n”, PUMP_FILE_NAME);
+              return -1;
+       }
+       while (1)
+       {
+              data = 1;
+              write(pump_fd, &data, sizeof(char)); // Send data to the led driver
+              sleep(1);
+
+              data = 0;
+              write(pump_fd, &data, sizeof(char));
+              sleep(1);
+       }
+
+       close(pump_fd);		// Close the device.
+return 0;		// Terminate the program.
+}
+
